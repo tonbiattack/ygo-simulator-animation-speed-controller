@@ -1,5 +1,8 @@
 const TARGET_ORIGIN = 'https://tsd0313.github.io';
-const TARGET_PATH_PREFIX = '/ygo-JunkBlade/dist/';
+const TARGET_SITES = [
+  { pathPrefix: '/ygo-JunkBlade/dist/', name: 'JunkBlade Simulator' },
+  { pathPrefix: '/ygo-DogmaBlade/dist/', name: 'DogmaBlade Simulator' }
+];
 const DEFAULT_SPEED = 4;
 
 const speedInput = document.querySelector('#speed');
@@ -28,13 +31,18 @@ function setResult(text, isError = false) {
   result.classList.toggle('error', isError);
 }
 
-function isTargetTab(tab) {
+function getTargetSite(tab) {
   try {
     const url = new URL(tab.url);
-    return url.origin === TARGET_ORIGIN && url.pathname.startsWith(TARGET_PATH_PREFIX);
+    if (url.origin !== TARGET_ORIGIN) return null;
+    return TARGET_SITES.find((site) => url.pathname.startsWith(site.pathPrefix)) || null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+function isTargetTab(tab) {
+  return Boolean(getTargetSite(tab));
 }
 
 // この関数はページ本体と同じJavaScript実行環境で実行する。
@@ -139,9 +147,9 @@ applyButton.addEventListener('click', applySpeed);
   activeTab = tab;
 
   if (isTargetTab(tab)) {
-    status.textContent = 'JunkBlade Simulator を検出しました。';
+    status.textContent = `${getTargetSite(tab).name} を検出しました。`;
   } else {
-    status.textContent = '対象外のページです。JunkBlade Simulator を開いてください。';
+    status.textContent = '対象外のページです。JunkBlade Simulator または DogmaBlade Simulator を開いてください。';
     status.classList.add('error');
     applyButton.disabled = true;
   }
