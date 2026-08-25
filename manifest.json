@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "JunkBlade Animation Speed",
+  "description": "JunkBlade Simulator のCreateJSアニメーションを 1x〜16x に高速化します。",
+  "version": "1.0.0",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["https://tsd0313.github.io/ygo-JunkBlade/dist/*"],
+  "action": {
+    "default_title": "JunkBladeのアニメーション速度",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
